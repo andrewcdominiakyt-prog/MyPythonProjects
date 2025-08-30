@@ -1,9 +1,15 @@
-import time
 import random
+
+# Safe input: clamp to 1..5
+try:
+    minesnumber = int(input('Enter number of apples (1-5): '))
+except ValueError:
+    minesnumber = 1
+minesnumber = max(1, min(5, minesnumber))
 
 gamerunning = False
 score = 0
-appleonboard = False
+appleonboard = 0
 
 def create_grid(rows, cols):
     return [["#" for _ in range(cols)] for _ in range(rows)]
@@ -16,16 +22,18 @@ def print_grid(grid):
     print()
 
 def apple():
-    global appleonboard, grid
-    if appleonboard:
+    """Place ONE apple if we still need more."""
+    global appleonboard, grid, minesnumber
+    if appleonboard >= minesnumber:
         return
-    while True:
-        y = random.randint(0, 4)
-        x = random.randint(0, 4)
-        if grid[y][x] == "#":
-            grid[y][x] = "A"
-            appleonboard = True
-            break
+
+    # pick from empty cells; avoids infinite loops
+    empties = [(y, x) for y in range(5) for x in range(5) if grid[y][x] == "#"]
+    if not empties:
+        return
+    y, x = random.choice(empties)
+    grid[y][x] = "A"
+    appleonboard += 1
 
 def activatesquare(y, x):
     grid[y][x] = "X"
@@ -41,6 +49,7 @@ activey = 2
 def gametick():
     global activey, activex, gamerunning, score, appleonboard
 
+    # ensure apples present up to target each tick
     apple()
 
     print_grid(grid)
@@ -66,14 +75,18 @@ def gametick():
     if (ny, nx) != (activey, activex):
         if grid[ny][nx] == "A":
             score += 1
-            appleonboard = False  
+            appleonboard -= 1
             print("Score:", score)
 
         deactivatesquare(activey, activex)
         activey, activex = ny, nx
         activatesquare(activey, activex)
 
+# place player and spawn apples immediately so you see them
 gamerunning = True
-activatesquare(activey, activex)  
+activatesquare(activey, activex)
+for _ in range(minesnumber):
+    apple()
+
 while gamerunning:
     gametick()
