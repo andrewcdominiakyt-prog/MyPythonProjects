@@ -1,11 +1,10 @@
 
-import pygame
 import time
 import random
 
 gamerunning = False
-
-
+score = 0
+appleonboard = False
 
 def create_grid(rows, cols):
     return [["#" for _ in range(cols)] for _ in range(rows)]
@@ -16,6 +15,18 @@ def print_grid(grid):
             print(item, end=' ')
         print()
 
+def apple():
+    global appleonboard
+    while True:
+        if appleonboard == False:
+            y = random.randint(0, 4)
+            x = random.randint(0, 4)
+            if grid[y][x] == "#":
+                grid[y][x] = "A"
+                appleonboard = True
+            else: 
+                continue
+#error is somewhere here i need to figurre how to fix this
 
 
 def activatesquare(y,x):
@@ -31,6 +42,8 @@ activey = 2
 
 
 def gametick():
+    apple()
+
     global activey, activex
     grid[activey][activex] = "X"
     print_grid(grid)
@@ -61,4 +74,3 @@ def gametick():
 gamerunning = True
 while gamerunning == True:
     gametick()
-    
