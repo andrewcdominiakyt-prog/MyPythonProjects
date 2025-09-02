@@ -1,7 +1,9 @@
 
 import random
 
-#make difficulty settings before gamestart
+gamerunning = False
+
+# Difficulty settings
 difficultynum = int(input("""Enter Difficulty
     Easy - Press 1
     Medium - Press 2
@@ -14,14 +16,24 @@ elif difficultynum == 2:
 elif difficultynum == 3:
     difficulty = 0.5
 
-# Initialize the game
+# Initialize the showngrid & hiddengrid
 gridsize = (int(input("Enter Desired Grid Size:")))
 grid = [['#' for _ in range(gridsize)] for _ in range(gridsize)]
-def print_grid():
+showngrid = [['#' for _ in range(gridsize)] for _ in range(gridsize)]
+
+def printshowngrid():
+    global showngrid
+    for row in showngrid:
+        print (" ".join(row))
+
+
+#mainly for debugging
+def printrealgrid():
     global grid
     for row in grid:
         print (" ".join(row))
 
+#initialize bombs
 numbombs = int(round((gridsize * gridsize) * difficulty))
 def place_bombs():
     global numbombs, gridsize, grid
@@ -34,4 +46,30 @@ def place_bombs():
                 grid[y][x] = 'B'
                 break
 place_bombs()
-print_grid()
+
+
+
+
+def playerturn():
+    global grid, showngrid, gridsize, gamerunning
+    while True:
+        y = int(input("Enter X Selection:"))
+        x = int(input("Enter Y Selection:"))
+        if x > (gridsize):
+            print ("Invalid Move, Try again")
+        elif x > (gridsize):
+            print ("Invalid Move, Try again")
+        elif grid[x][y] == "@":
+            print ("Square Taken, Try again")
+        elif grid[x][y] == "B":
+            print ("Square had a bomb. YOU LOSE")
+        
+            
+
+
+#start game            
+gamerunning = True
+printrealgrid()
+printshowngrid()           
+
+playerturn()
