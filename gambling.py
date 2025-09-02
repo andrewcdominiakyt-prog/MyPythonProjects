@@ -21,7 +21,7 @@ elif difficultynum == 3:
     moneymult = 1.3
     difficulty = 0.5
 elif difficultynum == 4:
-    moneymult = 1.5
+    moneymult = 1
     difficulty = 0
 
 
@@ -61,36 +61,41 @@ place_bombs()
 
 
 def playerturn():
-    global grid, showngrid, gridsize, gamerunning
-    while True:
-        y = int(input("Enter X Selection:"))
-        x = int(input("Enter Y Selection:"))
-        if x > (gridsize):
-            print ("Invalid Move, Try again")
-        elif x > (gridsize):
-            print ("Invalid Move, Try again")
-        elif showngrid[x][y] == "@":
-            print ("Square Taken, Try again")
-        elif grid[x][y] == "B":
-            print ("Square had a bomb. YOU LOSE")
-            printrealgrid()
-        else:
-            showngrid[x][y] = "X"
-            grid[x][y] = 'X'
+    global grid, showngrid, gridsize, gamerunning, money, bet, truebet, moneymult
+    y = int(input("Enter X Selection:"))
+    x = int(input("Enter Y Selection:"))
+    if  x == 999 or y == 999:
+        print("Cashing Out")
+        money += truebet
+        print (round(money))
+        return
+    if x > (gridsize - 1):
+        print ("Invalid Move, Try again")
+    elif x > (gridsize - 1):
+        print ("Invalid Move, Try again")
+    elif showngrid[x][y] == "X":
+        print ("Square Taken, Try again")
+    elif grid[x][y] == "B":
+        print ("Square had a bomb. YOU LOSE")
+        printrealgrid()
+    else:
+        showngrid[x][y] = "X"
+        grid[x][y] = 'X'
+        truebet = truebet * moneymult
+        printshowngrid()
+        print ("Availible Money:",truebet)
 
-            printshowngrid()
-
-                    
             
 
 
 #start game            
 gamerunning = True
 bet = int(input("Enter Bet"))
+truebet = bet * 0.75
 money -= bet
 
 printrealgrid()
 print()
 printshowngrid()           
-
-playerturn()
+while gamerunning == True:
+    playerturn()
