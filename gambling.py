@@ -1,20 +1,30 @@
 
 import random
-
+#initialize game
 gamerunning = False
+money = 100
+
 
 # Difficulty settings
 difficultynum = int(input("""Enter Difficulty
     Easy - Press 1
     Medium - Press 2
     Hard - Press 3
+    Free - Press 4                    
 > """))
 if difficultynum == 1:
+    moneymult = 1.1
     difficulty = 0.1
 elif difficultynum == 2:
     difficulty = 0.3
 elif difficultynum == 3:
+    moneymult = 1.3
     difficulty = 0.5
+elif difficultynum == 4:
+    moneymult = 1.5
+    difficulty = 0
+
+
 
 # Initialize the showngrid & hiddengrid
 gridsize = (int(input("Enter Desired Grid Size:")))
@@ -59,17 +69,28 @@ def playerturn():
             print ("Invalid Move, Try again")
         elif x > (gridsize):
             print ("Invalid Move, Try again")
-        elif grid[x][y] == "@":
+        elif showngrid[x][y] == "@":
             print ("Square Taken, Try again")
         elif grid[x][y] == "B":
             print ("Square had a bomb. YOU LOSE")
-        
+            printrealgrid()
+        else:
+            showngrid[x][y] = "X"
+            grid[x][y] = 'X'
+
+            printshowngrid()
+
+                    
             
 
 
 #start game            
 gamerunning = True
+bet = int(input("Enter Bet"))
+money -= bet
+
 printrealgrid()
+print()
 printshowngrid()           
 
 playerturn()
